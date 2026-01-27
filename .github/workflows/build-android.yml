@@ -55,13 +55,13 @@ jobs:
           retention-days: 30
 
       - name: Build Android Release APK (unsigned)
-        if: github.ref == 'refs/heads/main'
+        if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
         run: |
           cd android
           ./gradlew assembleRelease --no-daemon
 
       - name: Upload Release APK
-        if: github.ref == 'refs/heads/main'
+        if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
         uses: actions/upload-artifact@v4
         with:
           name: app-release-unsigned
