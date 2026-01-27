@@ -21,8 +21,44 @@ import { ReplaceMemberScreen } from '../screens/MemberLifecycle/ReplaceMemberScr
 import { RemoveMemberScreen } from '../screens/MemberLifecycle/RemoveMemberScreen';
 import { GroupClosureScreen } from '../screens/GroupClosureScreen';
 
+export type RootStackParamList = {
+    Main: undefined;
+    GroupCreation: undefined;
+    AuctionRoom: {
+        groupId: string;
+        groupName: string;
+        potValue: number;
+        commissionPercentage: number;
+        totalMembers: number;
+        baseInstallment: number;
+        monthNumber: number;
+    };
+    CollectionLedger: {
+        groupId: string;
+        groupName: string;
+        monthNumber: number;
+    };
+    AddMember: {
+        groupId: string;
+        groupName: string;
+    };
+    ReplaceMember: {
+        groupId: string;
+        groupName: string;
+    };
+    RemoveMember: {
+        groupId: string;
+        groupName: string;
+        potValue: number;
+    };
+    GroupClosure: {
+        groupId: string;
+        groupName?: string;
+    };
+};
+
 const Tab = createBottomTabNavigator();
-const Stack = createNativeStackNavigator();
+const Stack = createNativeStackNavigator<RootStackParamList>();
 
 /**
  * Bottom Tab Navigator
@@ -32,6 +68,7 @@ const TabNavigatorComponent = () => {
         <Tab.Navigator
             screenOptions={{
                 headerShown: false,
+                tabBarHideOnKeyboard: true,
                 tabBarActiveTintColor: '#0ea5e9',
                 tabBarInactiveTintColor: '#a3a3a3',
                 tabBarStyle: {

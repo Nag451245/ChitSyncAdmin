@@ -4,7 +4,7 @@
     "slug": "chitsync-admin",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/raghu_logo.png",
     "userInterfaceStyle": "light",
     "assetBundlePatterns": [
       "**/*"
@@ -15,8 +15,8 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#0ea5e9"
+        "foregroundImage": "./assets/raghu_logo.png",
+        "backgroundColor": "#ffffff"
       },
       "package": "com.chitsync.admin",
       "permissions": [
