@@ -1,4 +1,4 @@
-name: Release Android APK
+name: MANUAL RELEASE (Signed)
 
 # Workflow for manual Android release builds
 on:
@@ -7,11 +7,15 @@ on:
       version:
         description: 'Version number (e.g., 1.0.0)'
         required: true
+        default: '1.0.0'
         type: string
 
 jobs:
   release:
+    name: Build & Release APK
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     
     steps:
       - name: Checkout code
