@@ -24,14 +24,9 @@ type RootStackParamList = {
     };
 };
 
-type NavigationProp = NativeStackNavigationProp<RootStackParamList>;
+import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 
-interface ReplaceMemberScreenProps {
-    navigation: NavigationProp;
-    route: {
-        params: RootStackParamList['ReplaceMember'];
-    };
-}
+type ReplaceMemberScreenProps = NativeStackScreenProps<RootStackParamList, 'ReplaceMember'>;
 
 interface ExistingMember {
     id: string;

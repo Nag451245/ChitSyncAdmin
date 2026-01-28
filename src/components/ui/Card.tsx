@@ -1,11 +1,11 @@
 import React from 'react';
-import { View, ViewProps } from 'react-native';
+import { View, Text, ViewProps } from 'react-native';
 import Animated, { FadeIn, FadeOut } from 'react-native-reanimated';
 
 interface CardProps extends ViewProps {
     variant?: 'default' | 'glass' | 'gradient';
     gradientType?: 'primary' | 'profit' | 'loss' | 'warning';
-    children: React.ReactNode;
+    children?: React.ReactNode;
     animated?: boolean;
 }
 
@@ -76,12 +76,18 @@ interface FinancialCardProps extends CardProps {
     status?: 'profit' | 'loss' | 'neutral';
     amount?: string;
     label?: string;
+    title?: string;
+    trend?: string;
+    trendDirection?: 'up' | 'down' | 'neutral';
 }
 
 export const FinancialCard: React.FC<FinancialCardProps> = ({
     status = 'neutral',
     amount,
     label,
+    title,
+    trend,
+    trendDirection,
     children,
     ...props
 }) => {
@@ -96,16 +102,32 @@ export const FinancialCard: React.FC<FinancialCardProps> = ({
         }
     };
 
+    const getTrendColor = () => {
+        if (!trendDirection) return 'text-neutral-500';
+        return trendDirection === 'up' ? 'text-green-600' : trendDirection === 'down' ? 'text-red-600' : 'text-neutral-500';
+    };
+
+    const displayLabel = title || label;
+
     return (
         <Card {...props}>
-            {(amount || label) && (
+            {(amount || displayLabel) && (
                 <View className="mb-2">
-                    {label && (
-                        <View className="text-sm text-neutral-500 mb-1">{label}</View>
+                    {displayLabel && (
+                        <View className="text-sm text-neutral-500 mb-1">{displayLabel}</View>
                     )}
                     {amount && (
-                        <View className={`text-2xl font-bold ${getStatusColor()}`}>
-                            {amount}
+                        <View className="flex-row items-baseline justify-between">
+                            <Text className={`text-2xl font-bold ${getStatusColor()}`}>
+                                {amount}
+                            </Text>
+                        </View>
+                    )}
+                    {trend && (
+                        <View className="flex-row items-center mt-1">
+                            <Text className={`text-xs ${getTrendColor()} font-medium`}>
+                                {trendDirection === 'up' ? '↑' : trendDirection === 'down' ? '↓' : ''} {trend}
+                            </Text>
                         </View>
                     )}
                 </View>

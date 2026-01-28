@@ -75,18 +75,20 @@ export const CollectionsDashboardScreen: React.FC<CollectionsDashboardScreenProp
                 <View className="px-6 py-6 flex-row space-x-3">
                     <FinancialCard
                         title="Total Collected"
-                        amount={stats.totalCollected}
+                        amount={formatCurrency(stats.totalCollected)}
                         trend="All time"
                         trendDirection="up"
-                        variant="primary"
+                        variant="gradient"
+                        gradientType="primary"
                         className="flex-1"
                     />
                     <FinancialCard
                         title="Total Outstanding"
-                        amount={stats.totalPending}
+                        amount={formatCurrency(stats.totalPending)}
                         trend="Pending"
                         trendDirection="down"
-                        variant="warning"
+                        variant="gradient"
+                        gradientType="warning"
                         className="flex-1"
                     />
                 </View>

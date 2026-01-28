@@ -25,14 +25,9 @@ type RootStackParamList = {
     };
 };
 
-type NavigationProp = NativeStackNavigationProp<RootStackParamList>;
+import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 
-interface AddMemberScreenProps {
-    navigation: NavigationProp;
-    route: {
-        params: RootStackParamList['AddMember'];
-    };
-}
+type AddMemberScreenProps = NativeStackScreenProps<RootStackParamList, 'AddMember'>;
 
 interface MemberCandidate {
     id: string;

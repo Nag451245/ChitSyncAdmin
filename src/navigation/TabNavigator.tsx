@@ -41,10 +41,14 @@ export type RootStackParamList = {
     AddMember: {
         groupId: string;
         groupName: string;
+        currentMonth: number;
+        netPayableHistory: number[];
     };
     ReplaceMember: {
         groupId: string;
         groupName: string;
+        currentMonth: number;
+        netPayableHistory: number[];
     };
     RemoveMember: {
         groupId: string;
