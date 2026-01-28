@@ -1,18 +1,21 @@
-name: MANUAL RELEASE (Signed)
+name: Release Android APK (Signed)
 
-# Workflow for manual Android release builds
+# Triggers on Push to master OR Manual Dispatch
 on:
+  push:
+    branches:
+      - master
   workflow_dispatch:
     inputs:
       version:
         description: 'Version number (e.g., 1.0.0)'
-        required: true
+        required: false
         default: '1.0.0'
         type: string
 
 jobs:
   release:
-    name: Build & Release APK
+    name: Build & Release
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -42,7 +45,8 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Update version in app.json
+      - name: Update version in app.json (Manual Only)
+        if: "${{ inputs.version != '' }}"
         run: |
           npm install -g json
           json -I -f app.json -e "this.expo.version='${{ inputs.version }}'"
@@ -80,21 +84,16 @@ jobs:
       - name: Create Release
         uses: softprops/action-gh-release@v1
         with:
-          tag_name: v${{ inputs.version }}
-          name: ChitSync Admin v${{ inputs.version }}
+          tag_name: v${{ inputs.version || '1.0.0' }}-${{ github.run_number }}
+          name: Release v${{ inputs.version || '1.0.0' }} (Build ${{ github.run_number }})
           body: |
-            ## ChitSync Admin v${{ inputs.version }}
-            
-            ### What's New
-            - Add release notes here
+            ## Automated Release
+            Build Number: ${{ github.run_number }}
+            Commit: ${{ github.sha }}
             
             ### Installation
-            1. Download the APK file below
-            2. Enable "Install from Unknown Sources" on your Android device
-            3. Install the APK
-            
-            ### System Requirements
-            - Android 5.0 (Lollipop) or higher
+            1. Download the APK file below.
+            2. If successful, this is a Signed Release APK.
           files: |
             android/app/build/outputs/apk/release/*.apk
           draft: false
