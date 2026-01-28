@@ -1,17 +1,10 @@
-name: Release Android APK (Signed)
+name: Production Release
 
-# Triggers on Push to master OR Manual Dispatch
 on:
   push:
     branches:
       - master
   workflow_dispatch:
-    inputs:
-      version:
-        description: 'Version number (e.g., 1.0.0)'
-        required: false
-        default: '1.0.0'
-        type: string
 
 jobs:
   release:
@@ -45,22 +38,16 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Update version in app.json (Manual Only)
-        if: "${{ inputs.version != '' }}"
-        run: |
-          npm install -g json
-          json -I -f app.json -e "this.expo.version='${{ inputs.version }}'"
-
       - name: Run Expo Prebuild for Android
         run: npx expo prebuild --platform android --clean
 
       - name: Decode Keystore
-        if: secrets.ANDROID_KEYSTORE_BASE64
+        if: "${{ secrets.ANDROID_KEYSTORE_BASE64 != '' }}"
         run: |
           echo "${{ secrets.ANDROID_KEYSTORE_BASE64 }}" | base64 -d > android/app/chitsync.keystore
 
       - name: Build Signed Release APK
-        if: secrets.ANDROID_KEYSTORE_BASE64
+        if: "${{ secrets.ANDROID_KEYSTORE_BASE64 != '' }}"
         env:
           KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
           KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
@@ -75,7 +62,7 @@ jobs:
             -Pandroid.injected.signing.key.password=$KEY_PASSWORD
 
       - name: Build Unsigned Release APK (Fallback)
-        if: "!secrets.ANDROID_KEYSTORE_BASE64"
+        if: "${{ secrets.ANDROID_KEYSTORE_BASE64 == '' }}"
         run: |
           cd android
           chmod +x gradlew
@@ -84,8 +71,8 @@ jobs:
       - name: Create Release
         uses: softprops/action-gh-release@v1
         with:
-          tag_name: v${{ inputs.version || '1.0.0' }}-${{ github.run_number }}
-          name: Release v${{ inputs.version || '1.0.0' }} (Build ${{ github.run_number }})
+          tag_name: v1.0.${{ github.run_number }}
+          name: Release v1.0.${{ github.run_number }}
           body: |
             ## Automated Release
             Build Number: ${{ github.run_number }}
