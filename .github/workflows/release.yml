@@ -1,5 +1,6 @@
 name: Release Android APK
 
+# Workflow for manual Android release builds
 on:
   workflow_dispatch:
     inputs:
