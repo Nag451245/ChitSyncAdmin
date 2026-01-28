@@ -1,8 +1,8 @@
 diff --git a/node_modules/react-native-screens/android/src/main/java/com/swmansion/rnscreens/SearchBarManager.kt b/node_modules/react-native-screens/android/src/main/java/com/swmansion/rnscreens/SearchBarManager.kt
-index 8f9717b..b6ef38e 100644
+index 8f9717b..649176e 100644
 --- a/node_modules/react-native-screens/android/src/main/java/com/swmansion/rnscreens/SearchBarManager.kt
 +++ b/node_modules/react-native-screens/android/src/main/java/com/swmansion/rnscreens/SearchBarManager.kt
-@@ -157,81 +157,81 @@ class SearchBarManager :
+@@ -157,33 +157,33 @@ class SearchBarManager :
  
      // NativeCommands
  
@@ -42,61 +42,6 @@ index 8f9717b..b6ef38e 100644
          view?.handleCancelSearchJsRequest()
      }
  
-     // iOS only
- 
--    override fun setPlacement(
-+    fun setPlacement(
-         view: SearchBarView,
-         placeholder: String?,
-     ) {
-         logNotAvailable("setPlacement")
-     }
- 
--    override fun setAllowToolbarIntegration(
-+    fun setAllowToolbarIntegration(
-         view: SearchBarView,
-         value: Boolean,
-     ) {
-         logNotAvailable("allowToolbarIntegration")
-     }
- 
--    override fun setHideWhenScrolling(
-+    fun setHideWhenScrolling(
-         view: SearchBarView?,
-         value: Boolean,
-     ) {
-         logNotAvailable("hideWhenScrolling")
-     }
- 
--    override fun setObscureBackground(
-+    fun setObscureBackground(
-         view: SearchBarView?,
-         value: String?,
-     ) {
-         logNotAvailable("obscureBackground")
-     }
- 
--    override fun setHideNavigationBar(
-+    fun setHideNavigationBar(
-         view: SearchBarView?,
-         value: String?,
-     ) {
-         logNotAvailable("hideNavigationBar")
-     }
- 
--    override fun setCancelButtonText(
-+    fun setCancelButtonText(
-         view: SearchBarView?,
-         value: String?,
-     ) {
-         logNotAvailable("cancelButtonText")
-     }
- 
--    override fun setTintColor(
-+    fun setTintColor(
-         view: SearchBarView?,
-         value: Int?,
-     ) {
 diff --git a/node_modules/react-native-screens/src/fabric/FullWindowOverlayNativeComponent.ts b/node_modules/react-native-screens/src/fabric/FullWindowOverlayNativeComponent.ts
 index 4906480..46df308 100644
 --- a/node_modules/react-native-screens/src/fabric/FullWindowOverlayNativeComponent.ts
@@ -147,11 +92,14 @@ index 9005280..e5ee01c 100644
    screenId?: CT.WithDefault<string, ''>;
    sheetAllowedDetents?: number[];
 diff --git a/node_modules/react-native-screens/src/fabric/ScreenNativeComponent.ts b/node_modules/react-native-screens/src/fabric/ScreenNativeComponent.ts
-index 7d9e251..a1e2ce9 100644
+index 7d9e251..9be8d87 100644
 --- a/node_modules/react-native-screens/src/fabric/ScreenNativeComponent.ts
 +++ b/node_modules/react-native-screens/src/fabric/ScreenNativeComponent.ts
-@@ -4,7 +4,7 @@ import { codegenNativeComponent } from 'react-native';
+@@ -2,9 +2,10 @@
+ 
+ import { codegenNativeComponent } from 'react-native';
  import type { CodegenTypes as CT, ViewProps, ColorValue } from 'react-native';
++import type { DirectEventHandler } from 'react-native/Libraries/Types/CodegenTypes';
  
  // eslint-disable-next-line @typescript-eslint/ban-types
 -type ScreenEvent = Readonly<{}>;
@@ -159,29 +107,35 @@ index 7d9e251..a1e2ce9 100644
  
  type ScreenDismissedEvent = Readonly<{
    dismissCount: CT.Int32;
-@@ -64,16 +64,16 @@ type ScrollEdgeEffect = 'automatic' | 'hard' | 'soft' | 'hidden';
+@@ -64,17 +65,17 @@ type ScrollEdgeEffect = 'automatic' | 'hard' | 'soft' | 'hidden';
  type OptionalBoolean = 'undefined' | 'false' | 'true';
  
  export interface NativeProps extends ViewProps {
 -  onAppear?: CT.DirectEventHandler<ScreenEvent>;
 -  onDisappear?: CT.DirectEventHandler<ScreenEvent>;
-+  onAppear?: CT.DirectEventHandler<Readonly<{ val: string }>>;
-+  onDisappear?: CT.DirectEventHandler<Readonly<{ val: string }>>;
-   onDismissed?: CT.DirectEventHandler<ScreenDismissedEvent>;
-   onNativeDismissCancelled?: CT.DirectEventHandler<ScreenDismissedEvent>;
+-  onDismissed?: CT.DirectEventHandler<ScreenDismissedEvent>;
+-  onNativeDismissCancelled?: CT.DirectEventHandler<ScreenDismissedEvent>;
 -  onWillAppear?: CT.DirectEventHandler<ScreenEvent>;
 -  onWillDisappear?: CT.DirectEventHandler<ScreenEvent>;
-+  onWillAppear?: CT.DirectEventHandler<Readonly<{ val: string }>>;
-+  onWillDisappear?: CT.DirectEventHandler<Readonly<{ val: string }>>;
-   onHeaderHeightChange?: CT.DirectEventHandler<HeaderHeightChangeEvent>;
-   onTransitionProgress?: CT.DirectEventHandler<TransitionProgressEvent>;
+-  onHeaderHeightChange?: CT.DirectEventHandler<HeaderHeightChangeEvent>;
+-  onTransitionProgress?: CT.DirectEventHandler<TransitionProgressEvent>;
 -  onGestureCancel?: CT.DirectEventHandler<ScreenEvent>;
 -  onHeaderBackButtonClicked?: CT.DirectEventHandler<ScreenEvent>;
-+  onGestureCancel?: CT.DirectEventHandler<Readonly<{ val: string }>>;
-+  onHeaderBackButtonClicked?: CT.DirectEventHandler<Readonly<{ val: string }>>;
-   onSheetDetentChanged?: CT.DirectEventHandler<SheetDetentChangedEvent>;
+-  onSheetDetentChanged?: CT.DirectEventHandler<SheetDetentChangedEvent>;
++  onAppear?: DirectEventHandler<Readonly<{ val: string }>>;
++  onDisappear?: DirectEventHandler<Readonly<{ val: string }>>;
++  onDismissed?: DirectEventHandler<ScreenDismissedEvent>;
++  onNativeDismissCancelled?: DirectEventHandler<ScreenDismissedEvent>;
++  onWillAppear?: DirectEventHandler<Readonly<{ val: string }>>;
++  onWillDisappear?: DirectEventHandler<Readonly<{ val: string }>>;
++  onHeaderHeightChange?: DirectEventHandler<HeaderHeightChangeEvent>;
++  onTransitionProgress?: DirectEventHandler<TransitionProgressEvent>;
++  onGestureCancel?: DirectEventHandler<Readonly<{ val: string }>>;
++  onHeaderBackButtonClicked?: DirectEventHandler<Readonly<{ val: string }>>;
++  onSheetDetentChanged?: DirectEventHandler<SheetDetentChangedEvent>;
    screenId?: CT.WithDefault<string, ''>;
    sheetAllowedDetents?: number[];
+   sheetLargestUndimmedDetent?: CT.WithDefault<CT.Int32, -1>;
 diff --git a/node_modules/react-native-screens/src/fabric/ScreenStackHeaderConfigNativeComponent.ts b/node_modules/react-native-screens/src/fabric/ScreenStackHeaderConfigNativeComponent.ts
 index fcbb268..f3c752a 100644
 --- a/node_modules/react-native-screens/src/fabric/ScreenStackHeaderConfigNativeComponent.ts
