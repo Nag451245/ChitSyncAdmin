@@ -1,3 +1,102 @@
+diff --git a/node_modules/react-native-screens/android/src/main/java/com/swmansion/rnscreens/SearchBarManager.kt b/node_modules/react-native-screens/android/src/main/java/com/swmansion/rnscreens/SearchBarManager.kt
+index 8f9717b..b6ef38e 100644
+--- a/node_modules/react-native-screens/android/src/main/java/com/swmansion/rnscreens/SearchBarManager.kt
++++ b/node_modules/react-native-screens/android/src/main/java/com/swmansion/rnscreens/SearchBarManager.kt
+@@ -157,81 +157,81 @@ class SearchBarManager :
+ 
+     // NativeCommands
+ 
+-    override fun blur(view: SearchBarView?) {
++    fun blur(view: SearchBarView?) {
+         view?.handleBlurJsRequest()
+     }
+ 
+-    override fun focus(view: SearchBarView?) {
++    fun focus(view: SearchBarView?) {
+         view?.handleFocusJsRequest()
+     }
+ 
+-    override fun clearText(view: SearchBarView?) {
++    fun clearText(view: SearchBarView?) {
+         view?.handleClearTextJsRequest()
+     }
+ 
+-    override fun toggleCancelButton(
++    fun toggleCancelButton(
+         view: SearchBarView?,
+         flag: Boolean,
+     ) {
+         view?.handleToggleCancelButtonJsRequest(flag)
+     }
+ 
+-    override fun setText(
++    fun setText(
+         view: SearchBarView?,
+         text: String?,
+     ) {
+         view?.handleSetTextJsRequest(text)
+     }
+ 
+-    override fun cancelSearch(view: SearchBarView?) {
++    fun cancelSearch(view: SearchBarView?) {
+         view?.handleCancelSearchJsRequest()
+     }
+ 
+     // iOS only
+ 
+-    override fun setPlacement(
++    fun setPlacement(
+         view: SearchBarView,
+         placeholder: String?,
+     ) {
+         logNotAvailable("setPlacement")
+     }
+ 
+-    override fun setAllowToolbarIntegration(
++    fun setAllowToolbarIntegration(
+         view: SearchBarView,
+         value: Boolean,
+     ) {
+         logNotAvailable("allowToolbarIntegration")
+     }
+ 
+-    override fun setHideWhenScrolling(
++    fun setHideWhenScrolling(
+         view: SearchBarView?,
+         value: Boolean,
+     ) {
+         logNotAvailable("hideWhenScrolling")
+     }
+ 
+-    override fun setObscureBackground(
++    fun setObscureBackground(
+         view: SearchBarView?,
+         value: String?,
+     ) {
+         logNotAvailable("obscureBackground")
+     }
+ 
+-    override fun setHideNavigationBar(
++    fun setHideNavigationBar(
+         view: SearchBarView?,
+         value: String?,
+     ) {
+         logNotAvailable("hideNavigationBar")
+     }
+ 
+-    override fun setCancelButtonText(
++    fun setCancelButtonText(
+         view: SearchBarView?,
+         value: String?,
+     ) {
+         logNotAvailable("cancelButtonText")
+     }
+ 
+-    override fun setTintColor(
++    fun setTintColor(
+         view: SearchBarView?,
+         value: Int?,
+     ) {
 diff --git a/node_modules/react-native-screens/src/fabric/FullWindowOverlayNativeComponent.ts b/node_modules/react-native-screens/src/fabric/FullWindowOverlayNativeComponent.ts
 index 4906480..46df308 100644
 --- a/node_modules/react-native-screens/src/fabric/FullWindowOverlayNativeComponent.ts
@@ -84,10 +183,15 @@ index 7d9e251..a1e2ce9 100644
    screenId?: CT.WithDefault<string, ''>;
    sheetAllowedDetents?: number[];
 diff --git a/node_modules/react-native-screens/src/fabric/ScreenStackHeaderConfigNativeComponent.ts b/node_modules/react-native-screens/src/fabric/ScreenStackHeaderConfigNativeComponent.ts
-index fcbb268..7c8200b 100644
+index fcbb268..f3c752a 100644
 --- a/node_modules/react-native-screens/src/fabric/ScreenStackHeaderConfigNativeComponent.ts
 +++ b/node_modules/react-native-screens/src/fabric/ScreenStackHeaderConfigNativeComponent.ts
-@@ -6,9 +6,7 @@ import type { CodegenTypes as CT, ViewProps, ColorValue } from 'react-native';
+@@ -2,13 +2,12 @@
+ 
+ import { codegenNativeComponent } from 'react-native';
+ import type { CodegenTypes as CT, ViewProps, ColorValue } from 'react-native';
++import type { DirectEventHandler } from 'react-native/Libraries/Types/CodegenTypes';
+ 
  type DirectionType = 'rtl' | 'ltr';
  
  // eslint-disable-next-line @typescript-eslint/ban-types
@@ -98,17 +202,28 @@ index fcbb268..7c8200b 100644
  
  type OnPressHeaderBarButtonItemEvent = Readonly<{ buttonId: string }>;
  type OnPressHeaderBarButtonMenuItemEvent = Readonly<{ menuId: string }>;
-@@ -41,8 +39,8 @@ type BlurEffect =
+@@ -41,8 +40,8 @@ type BlurEffect =
  type UserInterfaceStyle = 'unspecified' | 'light' | 'dark';
  
  export interface NativeProps extends ViewProps {
 -  onAttached?: CT.DirectEventHandler<OnAttachedEvent>;
 -  onDetached?: CT.DirectEventHandler<OnDetachedEvent>;
-+  onAttached?: CT.DirectEventHandler<Readonly<{ val: string }>>;
-+  onDetached?: CT.DirectEventHandler<Readonly<{ val: string }>>;
++  onAttached?: DirectEventHandler<Readonly<{ val: string }>>;
++  onDetached?: DirectEventHandler<Readonly<{ val: string }>>;
    backgroundColor?: ColorValue;
    backTitle?: string;
    backTitleFontFamily?: string;
+@@ -74,8 +73,8 @@ export interface NativeProps extends ViewProps {
+   topInsetEnabled?: boolean;
+   headerLeftBarButtonItems?: CT.UnsafeMixed[];
+   headerRightBarButtonItems?: CT.UnsafeMixed[];
+-  onPressHeaderBarButtonItem?: CT.DirectEventHandler<OnPressHeaderBarButtonItemEvent>;
+-  onPressHeaderBarButtonMenuItem?: CT.DirectEventHandler<OnPressHeaderBarButtonMenuItemEvent>;
++  onPressHeaderBarButtonItem?: DirectEventHandler<OnPressHeaderBarButtonItemEvent>;
++  onPressHeaderBarButtonMenuItem?: DirectEventHandler<OnPressHeaderBarButtonMenuItemEvent>;
+   synchronousShadowStateUpdatesEnabled?: CT.WithDefault<boolean, false>;
+ 
+   // Experimental
 diff --git a/node_modules/react-native-screens/src/fabric/ScreenStackHeaderSubviewNativeComponent.ts b/node_modules/react-native-screens/src/fabric/ScreenStackHeaderSubviewNativeComponent.ts
 index 61da7f7..f7d9b71 100644
 --- a/node_modules/react-native-screens/src/fabric/ScreenStackHeaderSubviewNativeComponent.ts
