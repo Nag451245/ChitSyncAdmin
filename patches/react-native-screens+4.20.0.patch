@@ -142,7 +142,7 @@ index 5b7641c..c071bc0 100644
 +  interfaceOnly: true,
 +});
 diff --git a/node_modules/react-native-screens/src/fabric/SearchBarNativeComponent.ts b/node_modules/react-native-screens/src/fabric/SearchBarNativeComponent.ts
-index df774b9..ea2656e 100644
+index df774b9..d3c7ee1 100644
 --- a/node_modules/react-native-screens/src/fabric/SearchBarNativeComponent.ts
 +++ b/node_modules/react-native-screens/src/fabric/SearchBarNativeComponent.ts
 @@ -1,6 +1,6 @@
@@ -169,11 +169,15 @@ index df774b9..ea2656e 100644
  
  type SearchBarPlacement =
    | 'automatic'
-@@ -36,60 +28,46 @@ type AutoCapitalizeType =
+@@ -36,19 +28,23 @@ type AutoCapitalizeType =
  
  type OptionalBoolean = 'undefined' | 'false' | 'true';
  
--export interface NativeProps extends ViewProps {
++// eslint-disable-next-line @typescript-eslint/ban-types
++type SearchBarEvent = Readonly<{ val: string }>;
++type SearchButtonEvent = Readonly<{ val: string }>;
++
+ export interface NativeProps extends ViewProps {
 -  onSearchFocus?: CT.DirectEventHandler<SearchBarEvent> | null;
 -  onSearchBlur?: CT.DirectEventHandler<SearchBarEvent> | null;
 -  onSearchButtonPress?: CT.DirectEventHandler<SearchButtonPressedEvent> | null;
@@ -181,31 +185,43 @@ index df774b9..ea2656e 100644
 -  onChangeText?: CT.DirectEventHandler<ChangeTextEvent> | null;
 -  hideWhenScrolling?: CT.WithDefault<boolean, true>;
 -  autoCapitalize?: CT.WithDefault<AutoCapitalizeType, 'systemDefault'>;
--  placeholder?: string;
++  onSearchFocus?: CT.DirectEventHandler<SearchBarEvent>;
++  onSearchBlur?: CT.DirectEventHandler<SearchBarEvent>;
++  onSearchButtonPress?: CT.DirectEventHandler<SearchButtonEvent>;
++  onCancelButtonPress?: CT.DirectEventHandler<SearchBarEvent>;
++  onChangeText?: CT.DirectEventHandler<SearchButtonEvent>;
++  hideWhenScrolling?: boolean;
++  autoCapitalize?: string;
+   placeholder?: string;
 -  placement?: CT.WithDefault<SearchBarPlacement, 'automatic'>;
 -  allowToolbarIntegration?: CT.WithDefault<boolean, true>;
 -  obscureBackground?: CT.WithDefault<OptionalBoolean, 'undefined'>;
 -  hideNavigationBar?: CT.WithDefault<OptionalBoolean, 'undefined'>;
--  cancelButtonText?: string;
--  // TODO: implement these on iOS
--  barTintColor?: ColorValue;
--  tintColor?: ColorValue;
--  textColor?: ColorValue;
--
--  // Android only
++  placement?: string;
++  allowToolbarIntegration?: boolean;
++  obscureBackground?: string;
++  hideNavigationBar?: string;
+   cancelButtonText?: string;
+   // TODO: implement these on iOS
+   barTintColor?: ColorValue;
+@@ -56,40 +52,23 @@ export interface NativeProps extends ViewProps {
+   textColor?: ColorValue;
+ 
+   // Android only
 -  autoFocus?: CT.WithDefault<boolean, false>;
--  disableBackButtonOverride?: boolean;
--  // TODO: consider creating enum here
--  inputType?: string;
++  autoFocus?: boolean;
+   disableBackButtonOverride?: boolean;
+   // TODO: consider creating enum here
+   inputType?: string;
 -  onClose?: CT.DirectEventHandler<SearchBarEvent> | null;
 -  onOpen?: CT.DirectEventHandler<SearchBarEvent> | null;
--  hintTextColor?: ColorValue;
--  headerIconColor?: ColorValue;
++  onClose?: CT.DirectEventHandler<SearchBarEvent>;
++  onOpen?: CT.DirectEventHandler<SearchBarEvent>;
+   hintTextColor?: ColorValue;
+   headerIconColor?: ColorValue;
 -  shouldShowHintSearchIcon?: CT.WithDefault<boolean, true>;
--}
-+// eslint-disable-next-line @typescript-eslint/ban-types
-+type SearchBarEvent = Readonly<{ val: string }>;
-+type SearchButtonEvent = Readonly<{ val: string }>;
++  shouldShowHintSearchIcon?: boolean;
+ }
  
 -type ComponentType = HostComponent<NativeProps>;
 -
@@ -219,35 +235,7 @@ index df774b9..ea2656e 100644
 -  ) => void;
 -  setText: (viewRef: React.ElementRef<ComponentType>, text: string) => void;
 -  cancelSearch: (viewRef: React.ElementRef<ComponentType>) => void;
-+onSearchFocus ?: CT.DirectEventHandler<SearchBarEvent>;
-+onSearchBlur ?: CT.DirectEventHandler<SearchBarEvent>;
-+onSearchButtonPress ?: CT.DirectEventHandler<SearchButtonEvent>;
-+onCancelButtonPress ?: CT.DirectEventHandler<SearchBarEvent>;
-+onChangeText ?: CT.DirectEventHandler<SearchButtonEvent>;
-+hideWhenScrolling ?: boolean;
-+autoCapitalize ?: string;
-+placeholder ?: string;
-+placement ?: string;
-+allowToolbarIntegration ?: boolean;
-+obscureBackground ?: string;
-+hideNavigationBar ?: string;
-+cancelButtonText ?: string;
-+// TODO: implement these on iOS
-+barTintColor ?: ColorValue;
-+tintColor ?: ColorValue;
-+textColor ?: ColorValue;
-+
-+// Android only
-+autoFocus ?: boolean;
-+disableBackButtonOverride ?: boolean;
-+// TODO: consider creating enum here
-+inputType ?: string;
-+onClose ?: CT.DirectEventHandler<SearchBarEvent>;
-+onOpen ?: CT.DirectEventHandler<SearchBarEvent>;
-+hintTextColor ?: ColorValue;
-+headerIconColor ?: ColorValue;
-+shouldShowHintSearchIcon ?: boolean;
- }
+-}
  
 -export const Commands: NativeCommands = codegenNativeCommands<NativeCommands>({
 -  supportedCommands: [
@@ -261,7 +249,6 @@ index df774b9..ea2656e 100644
 -});
  
 -export default codegenNativeComponent<NativeProps>('RNSSearchBar', {});
-+
 +
 +
 +
