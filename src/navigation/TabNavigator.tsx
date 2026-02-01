@@ -1,4 +1,6 @@
 import React from 'react';
+import { Platform } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -68,6 +70,8 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
  * Bottom Tab Navigator
  */
 const TabNavigatorComponent = () => {
+    const insets = useSafeAreaInsets();
+
     return (
         <Tab.Navigator
             screenOptions={{
@@ -79,13 +83,14 @@ const TabNavigatorComponent = () => {
                     backgroundColor: '#ffffff',
                     borderTopWidth: 1,
                     borderTopColor: '#e5e5e5',
-                    height: 60,
-                    paddingBottom: 8,
+                    height: 60 + (Platform.OS === 'ios' ? insets.bottom : 0),
+                    paddingBottom: (Platform.OS === 'ios' ? insets.bottom : 8),
                     paddingTop: 8,
                 },
                 tabBarLabelStyle: {
                     fontSize: 12,
                     fontWeight: '600',
+                    marginBottom: Platform.OS === 'ios' ? 0 : 4,
                 },
             }}
         >

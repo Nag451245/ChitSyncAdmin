@@ -9,35 +9,8 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Card, Input, Button } from '../../components/ui';
+import * as Contacts from 'expo-contacts';
 
-interface MembersStepProps {
-    onComplete: (data: MembersData) => void;
-    onBack: () => void;
-    initialData?: MembersData;
-    totalMembers: number;
-}
-
-export interface MembersData {
-    members: Member[];
-}
-
-export interface Member {
-    id: string;
-    name: string;
-    phone: string;
-    ticketNumber: number;
-    source: 'database' | 'contacts';
-}
-
-/**
- * UI Screen 4: Group Creation - Step 3 (Members)
- * 
- * Features:
- * - Tabs: Global Database | Phone Contacts
- * - Member selection with ticket number assignment
- * - Progress counter (e.g., 12/20 members)
- * - Finish button disabled until all slots filled
- */
 export const MembersStep: React.FC<MembersStepProps> = ({
     onComplete,
     onBack,
@@ -49,8 +22,10 @@ export const MembersStep: React.FC<MembersStepProps> = ({
         initialData?.members || []
     );
     const [searchQuery, setSearchQuery] = useState('');
+    const [contactsMembers, setContactsMembers] = useState<Member[]>([]);
+    const [permissionStatus, setPermissionStatus] = useState<Contacts.PermissionStatus | null>(null);
 
-    // Mock data - will be replaced with actual database/contacts
+    // Mock Database Data (keeping this as is for now)
     const mockDatabaseMembers = [
         { id: '1', name: 'Ramesh Kumar', phone: '+91 98765 43210', source: 'database' as const },
         { id: '2', name: 'Suresh Patel', phone: '+91 98765 43211', source: 'database' as const },
@@ -59,15 +34,35 @@ export const MembersStep: React.FC<MembersStepProps> = ({
         { id: '5', name: 'Dinesh Gupta', phone: '+91 98765 43214', source: 'database' as const },
     ];
 
-    const mockContactsMembers = [
-        { id: 'c1', name: 'Amit Singh', phone: '+91 98765 43220', source: 'contacts' as const },
-        { id: 'c2', name: 'Vijay Reddy', phone: '+91 98765 43221', source: 'contacts' as const },
-        { id: 'c3', name: 'Prakash Rao', phone: '+91 98765 43222', source: 'contacts' as const },
-    ];
+    React.useEffect(() => {
+        (async () => {
+            const { status } = await Contacts.requestPermissionsAsync();
+            setPermissionStatus(status);
+
+            if (status === 'granted') {
+                const { data } = await Contacts.getContactsAsync({
+                    fields: [Contacts.Fields.PhoneNumbers],
+                });
+
+                if (data.length > 0) {
+                    const formattedContacts: Member[] = data
+                        .filter(c => c.phoneNumbers && c.phoneNumbers.length > 0)
+                        .map(c => ({
+                            id: c.id ?? Math.random().toString(), // fallback ID
+                            name: c.name ?? 'Unknown',
+                            phone: c.phoneNumbers?.[0]?.number ?? '',
+                            ticketNumber: 0, // Assigned on selection
+                            source: 'contacts' as const
+                        }));
+                    setContactsMembers(formattedContacts);
+                }
+            }
+        })();
+    }, []);
 
     const availableMembers = activeTab === 'database'
         ? mockDatabaseMembers
-        : mockContactsMembers;
+        : contactsMembers;
 
     const filteredMembers = availableMembers.filter(
         m =>
@@ -288,10 +283,10 @@ export const MembersStep: React.FC<MembersStepProps> = ({
                         fullWidth
                         onPress={handleComplete}
                         className="flex-1"
-                        disabled={progress < totalMembers}
+                        disabled={progress === 0}
                     >
                         {progress < totalMembers
-                            ? `Add ${totalMembers - progress} More`
+                            ? `Create with ${progress}/${totalMembers}`
                             : 'Create Group ✓'
                         }
                     </Button>
