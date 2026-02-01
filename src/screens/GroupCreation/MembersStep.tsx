@@ -12,6 +12,25 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { Card, Input, Button } from '../../components/ui';
 import * as Contacts from 'expo-contacts';
 
+interface MembersStepProps {
+    onComplete: (data: MembersData) => void;
+    onBack: () => void;
+    initialData?: MembersData;
+    totalMembers: number;
+}
+
+export interface MembersData {
+    members: Member[];
+}
+
+export interface Member {
+    id: string;
+    name: string;
+    phone: string;
+    ticketNumber: number;
+    source: 'database' | 'contacts';
+}
+
 export const MembersStep: React.FC<MembersStepProps> = ({
     onComplete,
     onBack,
