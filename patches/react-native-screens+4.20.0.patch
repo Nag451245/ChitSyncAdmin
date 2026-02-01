@@ -161,14 +161,16 @@ index 23a6f73..5f54d6f 100644
    using StateData = ConcreteViewShadowNode::ConcreteStateData;
  
 diff --git a/node_modules/react-native-screens/common/cpp/react/renderer/components/rnscreens/RNSSplitViewScreenState.h b/node_modules/react-native-screens/common/cpp/react/renderer/components/rnscreens/RNSSplitViewScreenState.h
-index 6052b56..b6674a0 100644
+index 6052b56..ea94072 100644
 --- a/node_modules/react-native-screens/common/cpp/react/renderer/components/rnscreens/RNSSplitViewScreenState.h
 +++ b/node_modules/react-native-screens/common/cpp/react/renderer/components/rnscreens/RNSSplitViewScreenState.h
-@@ -6,10 +6,12 @@
+@@ -6,10 +6,14 @@
  #include <react/renderer/mapbuffer/MapBufferBuilder.h>
  #endif // ANDROID
  
 +#include <jsi/jsi.h>
++#include <react/renderer/core/graphicsConversions.h>
++#include <react/renderer/graphics/Float.h>
 +
  namespace facebook::react {
  
@@ -178,7 +180,7 @@ index 6052b56..b6674a0 100644
    using Shared = std::shared_ptr<const RNSSplitViewScreenState>;
  
    RNSSplitViewScreenState() {};
-@@ -20,12 +22,9 @@ class JSI_EXPORT RNSSplitViewScreenState final {
+@@ -20,12 +24,9 @@ class JSI_EXPORT RNSSplitViewScreenState final {
    const Point contentOffset{};
  
  #if defined(ANDROID)
