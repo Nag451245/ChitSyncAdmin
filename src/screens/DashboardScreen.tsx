@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useCallback } from 'react';
 import {
     View,
     Text,
@@ -8,6 +8,7 @@ import {
     ActivityIndicator,
     RefreshControl,
 } from 'react-native';
+import { useFocusEffect } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Card, FinancialCard, Button } from '../components/ui';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
@@ -18,6 +19,7 @@ import type { Group } from '../types/database';
 type RootStackParamList = {
     Main: undefined;
     GroupCreation: undefined;
+    AuctionRoom: { groupId: string };
 };
 
 type NavigationProp = NativeStackNavigationProp<RootStackParamList>;
@@ -40,9 +42,11 @@ export const DashboardScreen: React.FC<DashboardScreenProps> = ({ navigation }) 
     const [refreshing, setRefreshing] = useState(false);
     const [groups, setGroups] = useState<Group[]>([]);
 
-    useEffect(() => {
-        loadDashboardData();
-    }, []);
+    useFocusEffect(
+        useCallback(() => {
+            loadDashboardData();
+        }, [])
+    );
 
     const loadDashboardData = async () => {
         try {

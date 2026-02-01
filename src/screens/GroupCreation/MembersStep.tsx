@@ -142,6 +142,7 @@ export const MembersStep: React.FC<MembersStepProps> = ({
                             variant={isSelected ? 'secondary' : 'primary'}
                             size="sm"
                             disabled={isSelected}
+                            onPress={() => handleAddMember(item)}
                         >
                             {isSelected ? 'Added' : 'Add'}
                         </Button>

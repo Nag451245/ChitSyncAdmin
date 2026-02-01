@@ -83,8 +83,8 @@ const TabNavigatorComponent = () => {
                     backgroundColor: '#ffffff',
                     borderTopWidth: 1,
                     borderTopColor: '#e5e5e5',
-                    height: 60 + (Platform.OS === 'ios' ? insets.bottom : 0),
-                    paddingBottom: (Platform.OS === 'ios' ? insets.bottom : 8),
+                    height: 60 + insets.bottom,
+                    paddingBottom: insets.bottom > 0 ? insets.bottom : 8,
                     paddingTop: 8,
                 },
                 tabBarLabelStyle: {
