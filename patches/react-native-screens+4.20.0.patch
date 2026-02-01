@@ -90,6 +90,40 @@ index bdcca41..ce42266 100644
      traits.set(ShadowNodeTraits::Trait::RootNodeKind);
      return traits;
    }
+diff --git a/node_modules/react-native-screens/common/cpp/react/renderer/components/rnscreens/RNSFullWindowOverlayState.h b/node_modules/react-native-screens/common/cpp/react/renderer/components/rnscreens/RNSFullWindowOverlayState.h
+index ae2b4f3..54a9a7d 100644
+--- a/node_modules/react-native-screens/common/cpp/react/renderer/components/rnscreens/RNSFullWindowOverlayState.h
++++ b/node_modules/react-native-screens/common/cpp/react/renderer/components/rnscreens/RNSFullWindowOverlayState.h
+@@ -6,24 +6,22 @@
+ #include <react/renderer/mapbuffer/MapBufferBuilder.h>
+ #endif // ANDROID
+ 
++#include <jsi/jsi.h>
+ #include <react/renderer/core/graphicsConversions.h>
+ #include <react/renderer/graphics/Float.h>
+ 
+ namespace facebook::react {
+ 
+ class JSI_EXPORT RNSFullWindowOverlayState final {
+- public:
++public:
+   using Shared = std::shared_ptr<const RNSFullWindowOverlayState>;
+ 
+   RNSFullWindowOverlayState() = default;
+ 
+ #if defined(ANDROID)
+-  RNSFullWindowOverlayState(
+-      const RNSFullWindowOverlayState &previousState,
+-      folly::dynamic data) {}
+-  folly::dynamic getDynamic() const {
+-    return {};
+-  }
++  RNSFullWindowOverlayState(const RNSFullWindowOverlayState &previousState,
++                            folly::dynamic data) {}
++  folly::dynamic getDynamic() const { return {}; }
+ #endif
+ };
+ 
 diff --git a/node_modules/react-native-screens/common/cpp/react/renderer/components/rnscreens/RNSSplitViewScreenShadowNode.h b/node_modules/react-native-screens/common/cpp/react/renderer/components/rnscreens/RNSSplitViewScreenShadowNode.h
 index 23a6f73..5f54d6f 100644
 --- a/node_modules/react-native-screens/common/cpp/react/renderer/components/rnscreens/RNSSplitViewScreenShadowNode.h
@@ -125,6 +159,40 @@ index 23a6f73..5f54d6f 100644
 +public:
    using ConcreteViewShadowNode::ConcreteViewShadowNode;
    using StateData = ConcreteViewShadowNode::ConcreteStateData;
+ 
+diff --git a/node_modules/react-native-screens/common/cpp/react/renderer/components/rnscreens/RNSSplitViewScreenState.h b/node_modules/react-native-screens/common/cpp/react/renderer/components/rnscreens/RNSSplitViewScreenState.h
+index 6052b56..b6674a0 100644
+--- a/node_modules/react-native-screens/common/cpp/react/renderer/components/rnscreens/RNSSplitViewScreenState.h
++++ b/node_modules/react-native-screens/common/cpp/react/renderer/components/rnscreens/RNSSplitViewScreenState.h
+@@ -6,10 +6,12 @@
+ #include <react/renderer/mapbuffer/MapBufferBuilder.h>
+ #endif // ANDROID
+ 
++#include <jsi/jsi.h>
++
+ namespace facebook::react {
+ 
+ class JSI_EXPORT RNSSplitViewScreenState final {
+- public:
++public:
+   using Shared = std::shared_ptr<const RNSSplitViewScreenState>;
+ 
+   RNSSplitViewScreenState() {};
+@@ -20,12 +22,9 @@ class JSI_EXPORT RNSSplitViewScreenState final {
+   const Point contentOffset{};
+ 
+ #if defined(ANDROID)
+-  RNSSplitViewScreenState(
+-      const RNSSplitViewScreenState &previousState,
+-      folly::dynamic data) {}
+-  folly::dynamic getDynamic() const {
+-    return {};
+-  }
++  RNSSplitViewScreenState(const RNSSplitViewScreenState &previousState,
++                          folly::dynamic data) {}
++  folly::dynamic getDynamic() const { return {}; }
+ #endif
+ };
  
 diff --git a/node_modules/react-native-screens/src/fabric/FullWindowOverlayNativeComponent.ts b/node_modules/react-native-screens/src/fabric/FullWindowOverlayNativeComponent.ts
 index 4906480..46df308 100644
