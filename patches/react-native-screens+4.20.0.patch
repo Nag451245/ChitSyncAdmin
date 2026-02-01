@@ -47,6 +47,85 @@ index 5347241..0caa657 100644
  
  } // namespace react
  } // namespace facebook
+diff --git a/node_modules/react-native-screens/common/cpp/react/renderer/components/rnscreens/RNSFullWindowOverlayShadowNode.h b/node_modules/react-native-screens/common/cpp/react/renderer/components/rnscreens/RNSFullWindowOverlayShadowNode.h
+index bdcca41..ce42266 100644
+--- a/node_modules/react-native-screens/common/cpp/react/renderer/components/rnscreens/RNSFullWindowOverlayShadowNode.h
++++ b/node_modules/react-native-screens/common/cpp/react/renderer/components/rnscreens/RNSFullWindowOverlayShadowNode.h
+@@ -1,31 +1,29 @@
+ #pragma once
+ 
++#include "RNSFullWindowOverlayState.h"
+ #include <jsi/jsi.h>
+ #include <react/renderer/components/rnscreens/EventEmitters.h>
+ #include <react/renderer/components/rnscreens/Props.h>
+ #include <react/renderer/components/view/ConcreteViewShadowNode.h>
+ #include <react/renderer/core/LayoutContext.h>
+-#include "RNSFullWindowOverlayState.h"
+ 
+ namespace facebook::react {
+ 
+ JSI_EXPORT extern const char RNSFullWindowOverlayComponentName[];
+ 
+-using ConcreteViewShadowNodeSuperType = ConcreteViewShadowNode<
+-    RNSFullWindowOverlayComponentName,
+-    RNSFullWindowOverlayProps,
+-    RNSFullWindowOverlayEventEmitter,
+-    RNSFullWindowOverlayState>;
++using RNSFullWindowOverlayShadowNodeSuperType = ConcreteViewShadowNode<
++    RNSFullWindowOverlayComponentName, RNSFullWindowOverlayProps,
++    RNSFullWindowOverlayEventEmitter, RNSFullWindowOverlayState>;
+ 
+ class JSI_EXPORT RNSFullWindowOverlayShadowNode final
+-    : public ConcreteViewShadowNodeSuperType {
+- public:
++    : public RNSFullWindowOverlayShadowNodeSuperType {
++public:
+   using ConcreteViewShadowNode::ConcreteViewShadowNode;
+   using StateData = ConcreteViewShadowNode::ConcreteStateData;
+ 
+ #if !defined(ANDROID)
+   static ShadowNodeTraits BaseTraits() {
+-    auto traits = ConcreteViewShadowNodeSuperType::BaseTraits();
++    auto traits = RNSFullWindowOverlayShadowNodeSuperType::BaseTraits();
+     traits.set(ShadowNodeTraits::Trait::RootNodeKind);
+     return traits;
+   }
+diff --git a/node_modules/react-native-screens/common/cpp/react/renderer/components/rnscreens/RNSSplitViewScreenShadowNode.h b/node_modules/react-native-screens/common/cpp/react/renderer/components/rnscreens/RNSSplitViewScreenShadowNode.h
+index 23a6f73..5f54d6f 100644
+--- a/node_modules/react-native-screens/common/cpp/react/renderer/components/rnscreens/RNSSplitViewScreenShadowNode.h
++++ b/node_modules/react-native-screens/common/cpp/react/renderer/components/rnscreens/RNSSplitViewScreenShadowNode.h
+@@ -1,25 +1,23 @@
+ #pragma once
+ 
++#include "RNSSplitViewScreenState.h"
+ #include <jsi/jsi.h>
+ #include <react/renderer/components/rnscreens/EventEmitters.h>
+ #include <react/renderer/components/rnscreens/Props.h>
+ #include <react/renderer/components/view/ConcreteViewShadowNode.h>
+ #include <react/renderer/core/LayoutContext.h>
+-#include "RNSSplitViewScreenState.h"
+ 
+ namespace facebook::react {
+ 
+ JSI_EXPORT extern const char RNSSplitViewScreenComponentName[];
+ 
+-using ConcreteViewShadowNodeSuperType = ConcreteViewShadowNode<
+-    RNSSplitViewScreenComponentName,
+-    RNSSplitViewScreenProps,
+-    RNSSplitViewScreenEventEmitter,
+-    RNSSplitViewScreenState>;
++using RNSSplitViewScreenShadowNodeSuperType = ConcreteViewShadowNode<
++    RNSSplitViewScreenComponentName, RNSSplitViewScreenProps,
++    RNSSplitViewScreenEventEmitter, RNSSplitViewScreenState>;
+ 
+ class JSI_EXPORT RNSSplitViewScreenShadowNode final
+-    : public ConcreteViewShadowNodeSuperType {
+- public:
++    : public RNSSplitViewScreenShadowNodeSuperType {
++public:
+   using ConcreteViewShadowNode::ConcreteViewShadowNode;
+   using StateData = ConcreteViewShadowNode::ConcreteStateData;
+ 
 diff --git a/node_modules/react-native-screens/src/fabric/FullWindowOverlayNativeComponent.ts b/node_modules/react-native-screens/src/fabric/FullWindowOverlayNativeComponent.ts
 index 4906480..46df308 100644
 --- a/node_modules/react-native-screens/src/fabric/FullWindowOverlayNativeComponent.ts
